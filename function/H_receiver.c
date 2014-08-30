@@ -1,5 +1,5 @@
 #include "mex.h"
-#include "math.h"
+#include <math.h>
 
 /*
  *  H_RECEIVER.c - receive a position and returns the value of the vector field in such position.
@@ -11,6 +11,9 @@
  *  Outputs:
  *  - Hfield : strength of magnetic field in receiver position
  */
+#ifndef M_1_PI 
+    #define M_1_PI 3.183098861837907e-01
+#endif
 
 #define PERTURBATION 0.1e-9
 

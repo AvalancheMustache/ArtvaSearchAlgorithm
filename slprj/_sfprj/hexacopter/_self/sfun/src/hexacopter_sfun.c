@@ -7,6 +7,8 @@
 #include "c5_hexacopter.h"
 #include "c6_hexacopter.h"
 #include "c7_hexacopter.h"
+#include "c8_hexacopter.h"
+#include "c9_hexacopter.h"
 
 /* Type Definitions */
 
@@ -57,6 +59,16 @@ unsigned int sf_hexacopter_method_dispatcher(SimStruct *simstructPtr, unsigned
     return 1;
   }
 
+  if (chartFileNumber==8) {
+    c8_hexacopter_method_dispatcher(simstructPtr, method, data);
+    return 1;
+  }
+
+  if (chartFileNumber==9) {
+    c9_hexacopter_method_dispatcher(simstructPtr, method, data);
+    return 1;
+  }
+
   return 0;
 }
 
@@ -90,10 +102,10 @@ unsigned int sf_hexacopter_process_check_sum_call( int nlhs, mxArray * plhs[],
       ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(0U);
       ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(0U);
     } else if (!strcmp(commandName,"makefile")) {
-      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(705404295U);
-      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2095585383U);
-      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(26680082U);
-      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2092693423U);
+      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(458626916U);
+      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(4138381197U);
+      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2841664991U);
+      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1148169181U);
     } else if (nrhs==3 && !strcmp(commandName,"chart")) {
       unsigned int chartFileNumber;
       chartFileNumber = (unsigned int)mxGetScalar(prhs[2]);
@@ -133,6 +145,20 @@ unsigned int sf_hexacopter_process_check_sum_call( int nlhs, mxArray * plhs[],
           break;
         }
 
+       case 8:
+        {
+          extern void sf_c8_hexacopter_get_check_sum(mxArray *plhs[]);
+          sf_c8_hexacopter_get_check_sum(plhs);
+          break;
+        }
+
+       case 9:
+        {
+          extern void sf_c9_hexacopter_get_check_sum(mxArray *plhs[]);
+          sf_c9_hexacopter_get_check_sum(plhs);
+          break;
+        }
+
        default:
         ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(0.0);
         ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(0.0);
@@ -140,18 +166,18 @@ unsigned int sf_hexacopter_process_check_sum_call( int nlhs, mxArray * plhs[],
         ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(0.0);
       }
     } else if (!strcmp(commandName,"target")) {
-      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2083502392U);
-      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(1110276785U);
-      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(3258378658U);
-      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3926592909U);
+      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3031367619U);
+      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(4001028638U);
+      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(3978939492U);
+      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(838979348U);
     } else {
       return 0;
     }
   } else {
-    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2301022654U);
-    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(926384027U);
-    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2066203469U);
-    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2546976957U);
+    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(710810459U);
+    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(4009977933U);
+    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(1992736868U);
+    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(4100429513U);
   }
 
   return 1;
@@ -240,6 +266,30 @@ unsigned int sf_hexacopter_autoinheritance_info( int nlhs, mxArray * plhs[], int
         if (strcmp(aiChksum, "SDOwiPgmZCjGK45TVfIrRB") == 0) {
           extern mxArray *sf_c7_hexacopter_get_autoinheritance_info(void);
           plhs[0] = sf_c7_hexacopter_get_autoinheritance_info();
+          break;
+        }
+
+        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
+        break;
+      }
+
+     case 8:
+      {
+        if (strcmp(aiChksum, "CwXadXbct6prsnYWalTwjF") == 0) {
+          extern mxArray *sf_c8_hexacopter_get_autoinheritance_info(void);
+          plhs[0] = sf_c8_hexacopter_get_autoinheritance_info();
+          break;
+        }
+
+        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
+        break;
+      }
+
+     case 9:
+      {
+        if (strcmp(aiChksum, "YksY1EZyahBOw4qReXU5y") == 0) {
+          extern mxArray *sf_c9_hexacopter_get_autoinheritance_info(void);
+          plhs[0] = sf_c9_hexacopter_get_autoinheritance_info();
           break;
         }
 
@@ -337,6 +387,28 @@ unsigned int sf_hexacopter_get_eml_resolved_functions_info( int nlhs, mxArray *
         break;
       }
 
+     case 8:
+      {
+        extern const mxArray *sf_c8_hexacopter_get_eml_resolved_functions_info
+          (void);
+        mxArray *persistentMxArray = (mxArray *)
+          sf_c8_hexacopter_get_eml_resolved_functions_info();
+        plhs[0] = mxDuplicateArray(persistentMxArray);
+        mxDestroyArray(persistentMxArray);
+        break;
+      }
+
+     case 9:
+      {
+        extern const mxArray *sf_c9_hexacopter_get_eml_resolved_functions_info
+          (void);
+        mxArray *persistentMxArray = (mxArray *)
+          sf_c9_hexacopter_get_eml_resolved_functions_info();
+        plhs[0] = mxDuplicateArray(persistentMxArray);
+        mxDestroyArray(persistentMxArray);
+        break;
+      }
+
      default:
       plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
     }
@@ -417,6 +489,24 @@ unsigned int sf_hexacopter_third_party_uses_info( int nlhs, mxArray * plhs[],
         }
       }
 
+     case 8:
+      {
+        if (strcmp(tpChksum, "xONZMmOa8yoHjfPfS2yuwC") == 0) {
+          extern mxArray *sf_c8_hexacopter_third_party_uses_info(void);
+          plhs[0] = sf_c8_hexacopter_third_party_uses_info();
+          break;
+        }
+      }
+
+     case 9:
+      {
+        if (strcmp(tpChksum, "y0KsrcKQ0xQjiHnrtfCsTE") == 0) {
+          extern mxArray *sf_c9_hexacopter_third_party_uses_info(void);
+          plhs[0] = sf_c9_hexacopter_third_party_uses_info();
+          break;
+        }
+      }
+
      default:
       plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
     }
@@ -490,6 +580,24 @@ unsigned int sf_hexacopter_updateBuildInfo_args_info( int nlhs, mxArray * plhs[]
         }
       }
 
+     case 8:
+      {
+        if (strcmp(tpChksum, "xONZMmOa8yoHjfPfS2yuwC") == 0) {
+          extern mxArray *sf_c8_hexacopter_updateBuildInfo_args_info(void);
+          plhs[0] = sf_c8_hexacopter_updateBuildInfo_args_info();
+          break;
+        }
+      }
+
+     case 9:
+      {
+        if (strcmp(tpChksum, "y0KsrcKQ0xQjiHnrtfCsTE") == 0) {
+          extern mxArray *sf_c9_hexacopter_updateBuildInfo_args_info(void);
+          plhs[0] = sf_c9_hexacopter_updateBuildInfo_args_info();
+          break;
+        }
+      }
+
      default:
       plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
     }
@@ -501,7 +609,7 @@ unsigned int sf_hexacopter_updateBuildInfo_args_info( int nlhs, mxArray * plhs[]
 void hexacopter_debug_initialize(struct SfDebugInstanceStruct* debugInstance)
 {
   _hexacopterMachineNumber_ = sf_debug_initialize_machine(debugInstance,
-    "hexacopter","sfun",0,5,0,0,0);
+    "hexacopter","sfun",0,7,0,0,0);
   sf_debug_set_machine_event_thresholds(debugInstance,_hexacopterMachineNumber_,
     0,0);
   sf_debug_set_machine_data_thresholds(debugInstance,_hexacopterMachineNumber_,0);

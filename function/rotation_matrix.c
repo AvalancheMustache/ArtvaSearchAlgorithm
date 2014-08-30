@@ -6,7 +6,7 @@
  *  Inputs: 
  *  - angles : orientation
  *  Outputs:
- *  - rot : rotation matrix
+ *  - rot : ground 2 body rotation matrix
  */
 
 void rotation_matrix( double *rot, double* angles){

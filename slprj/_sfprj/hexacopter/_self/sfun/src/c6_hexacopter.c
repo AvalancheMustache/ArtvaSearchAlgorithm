@@ -1575,7 +1575,7 @@ static void c6_info_helper(const mxArray **c6_info)
   sf_mex_addfield(*c6_info, c6_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/ops/eml_mtimes_helper.m"),
                   "resolved", "resolved", 0);
-  sf_mex_addfield(*c6_info, c6_b_emlrt_marshallOut(1383877294U), "fileTimeLo",
+  sf_mex_addfield(*c6_info, c6_b_emlrt_marshallOut(1383880894U), "fileTimeLo",
                   "fileTimeLo", 0);
   sf_mex_addfield(*c6_info, c6_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 0);
@@ -1597,7 +1597,7 @@ static void c6_info_helper(const mxArray **c6_info)
   sf_mex_addfield(*c6_info, c6_emlrt_marshallOut(
     "[IXE]$matlabroot$/toolbox/shared/coder/coder/+coder/+internal/isBuiltInNumeric.m"),
                   "resolved", "resolved", 1);
-  sf_mex_addfield(*c6_info, c6_b_emlrt_marshallOut(1363714556U), "fileTimeLo",
+  sf_mex_addfield(*c6_info, c6_b_emlrt_marshallOut(1363718156U), "fileTimeLo",
                   "fileTimeLo", 1);
   sf_mex_addfield(*c6_info, c6_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 1);
@@ -2274,10 +2274,10 @@ static void mdlSetWorkWidths_c6_hexacopter(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2225838408U));
-  ssSetChecksum1(S,(715413352U));
-  ssSetChecksum2(S,(2683306836U));
-  ssSetChecksum3(S,(604836356U));
+  ssSetChecksum0(S,(3150365801U));
+  ssSetChecksum1(S,(4198638009U));
+  ssSetChecksum2(S,(1331046358U));
+  ssSetChecksum3(S,(3243495592U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

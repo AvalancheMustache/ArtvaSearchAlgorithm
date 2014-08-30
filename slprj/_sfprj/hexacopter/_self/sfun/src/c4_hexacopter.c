@@ -917,7 +917,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/atan2.m"), "resolved",
                   "resolved", 0);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343830372U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343837572U), "fileTimeLo",
                   "fileTimeLo", 0);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 0);
@@ -939,7 +939,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/eml/eml_scalar_eg.m"), "resolved",
                   "resolved", 1);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1375980688U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1375987888U), "fileTimeLo",
                   "fileTimeLo", 1);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 1);
@@ -961,7 +961,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[IXE]$matlabroot$/toolbox/coder/coder/+coder/+internal/scalarEg.p"),
                   "resolved", "resolved", 2);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1389307920U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1389311520U), "fileTimeLo",
                   "fileTimeLo", 2);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 2);
@@ -983,7 +983,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/eml/eml_scalexp_alloc.m"),
                   "resolved", "resolved", 3);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1375980688U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1375987888U), "fileTimeLo",
                   "fileTimeLo", 3);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 3);
@@ -1005,7 +1005,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[IXE]$matlabroot$/toolbox/coder/coder/+coder/+internal/scalexpAlloc.p"),
                   "resolved", "resolved", 4);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1389307920U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1389311520U), "fileTimeLo",
                   "fileTimeLo", 4);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 4);
@@ -1027,7 +1027,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/eml_scalar_atan2.m"),
                   "resolved", "resolved", 5);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286818720U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286825920U), "fileTimeLo",
                   "fileTimeLo", 5);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 5);
@@ -1046,11 +1046,11 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/ops/mrdivide.p"), "resolved",
                   "resolved", 6);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1388460096U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1388463696U), "fileTimeLo",
                   "fileTimeLo", 6);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 6);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1370009886U), "mFileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1370017086U), "mFileTimeLo",
                   "mFileTimeLo", 6);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "mFileTimeHi",
                   "mFileTimeHi", 6);
@@ -1068,7 +1068,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[IXE]$matlabroot$/toolbox/shared/coder/coder/+coder/+internal/assert.m"),
                   "resolved", "resolved", 7);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1363714556U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1363718156U), "fileTimeLo",
                   "fileTimeLo", 7);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 7);
@@ -1089,7 +1089,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/ops/rdivide.m"), "resolved",
                   "resolved", 8);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1363713880U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1363717480U), "fileTimeLo",
                   "fileTimeLo", 8);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 8);
@@ -1111,7 +1111,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[IXE]$matlabroot$/toolbox/shared/coder/coder/+coder/+internal/isBuiltInNumeric.m"),
                   "resolved", "resolved", 9);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1363714556U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1363718156U), "fileTimeLo",
                   "fileTimeLo", 9);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 9);
@@ -1133,7 +1133,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/eml/eml_scalexp_compatible.m"),
                   "resolved", "resolved", 10);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286818796U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286825996U), "fileTimeLo",
                   "fileTimeLo", 10);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 10);
@@ -1156,7 +1156,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/eml/eml_div.m"), "resolved",
                   "resolved", 11);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1375980688U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1375987888U), "fileTimeLo",
                   "fileTimeLo", 11);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 11);
@@ -1180,7 +1180,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[IXE]$matlabroot$/toolbox/coder/coder/+coder/+internal/div.p"), "resolved",
                   "resolved", 12);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1389307920U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1389311520U), "fileTimeLo",
                   "fileTimeLo", 12);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 12);
@@ -1201,7 +1201,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/log.m"), "resolved",
                   "resolved", 13);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343830380U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343837580U), "fileTimeLo",
                   "fileTimeLo", 13);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 13);
@@ -1225,7 +1225,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/eml/eml_error.m"), "resolved",
                   "resolved", 14);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343830358U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343837558U), "fileTimeLo",
                   "fileTimeLo", 14);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 14);
@@ -1249,7 +1249,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/eml_scalar_log.m"),
                   "resolved", "resolved", 15);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286818728U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286825928U), "fileTimeLo",
                   "fileTimeLo", 15);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 15);
@@ -1272,7 +1272,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elmat/realmax.m"), "resolved",
                   "resolved", 16);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1307651242U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1307658442U), "fileTimeLo",
                   "fileTimeLo", 16);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 16);
@@ -1296,7 +1296,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/eml/eml_realmax.m"), "resolved",
                   "resolved", 17);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1326727996U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1326731596U), "fileTimeLo",
                   "fileTimeLo", 17);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 17);
@@ -1320,7 +1320,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/eml/eml_float_model.m"),
                   "resolved", "resolved", 18);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1326727996U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1326731596U), "fileTimeLo",
                   "fileTimeLo", 18);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 18);
@@ -1343,11 +1343,11 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/ops/mrdivide.p"), "resolved",
                   "resolved", 19);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1388460096U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1388463696U), "fileTimeLo",
                   "fileTimeLo", 19);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 19);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1370009886U), "mFileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1370017086U), "mFileTimeLo",
                   "mFileTimeLo", 19);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "mFileTimeHi",
                   "mFileTimeHi", 19);
@@ -1364,7 +1364,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/cos.m"), "resolved",
                   "resolved", 20);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343830372U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343837572U), "fileTimeLo",
                   "fileTimeLo", 20);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 20);
@@ -1388,7 +1388,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/eml_scalar_cos.m"),
                   "resolved", "resolved", 21);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286818722U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286825922U), "fileTimeLo",
                   "fileTimeLo", 21);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 21);
@@ -1409,7 +1409,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/sin.m"), "resolved",
                   "resolved", 22);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343830386U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1343837586U), "fileTimeLo",
                   "fileTimeLo", 22);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 22);
@@ -1433,7 +1433,7 @@ static void c4_info_helper(const mxArray **c4_info)
   sf_mex_addfield(*c4_info, c4_emlrt_marshallOut(
     "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/eml_scalar_sin.m"),
                   "resolved", "resolved", 23);
-  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286818736U), "fileTimeLo",
+  sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(1286825936U), "fileTimeLo",
                   "fileTimeLo", 23);
   sf_mex_addfield(*c4_info, c4_b_emlrt_marshallOut(0U), "fileTimeHi",
                   "fileTimeHi", 23);
@@ -2120,10 +2120,10 @@ static void mdlSetWorkWidths_c4_hexacopter(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(3658417296U));
-  ssSetChecksum1(S,(2931047425U));
-  ssSetChecksum2(S,(313392272U));
-  ssSetChecksum3(S,(833068459U));
+  ssSetChecksum0(S,(3354094868U));
+  ssSetChecksum1(S,(1816680803U));
+  ssSetChecksum2(S,(1318518569U));
+  ssSetChecksum3(S,(1047630891U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

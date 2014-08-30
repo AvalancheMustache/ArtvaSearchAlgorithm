@@ -15,16 +15,11 @@ L    = 0.300;
 % Accelerazione gravitazionale
 g    = 9.810;
 
-% Rumore misura
-%vt = zeros(3,1);
-%Qt = eye(3,3);
-%Qt = zeros(3,3);
-
 % Rumore Stato
 wt = zeros(9,1);
-%Rt = eye(9,9);
 Rt = zeros(9,9);
 
+% Rumore misura
 vt = zeros(3,1);
 Qt = 0.5*ones(3,3);
 

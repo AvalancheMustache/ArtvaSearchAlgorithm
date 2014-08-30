@@ -1,5 +1,5 @@
 #include "mex.h"
-#include "math.h"
+#include <math.h>
 #include <stdlib.h>
 
 #define PERTURBAZIONE 0.1e-20
@@ -8,6 +8,10 @@
     #define DEB(m)   mexPrintf("[debug] line :: %d \n",m);  
 #else
     #define DEB(m)   ;
+#endif
+
+#ifndef M_1_PI 
+    #define M_1_PI 3.183098861837907e-01
 #endif
 
 void eval_H(double HField[], double rT[], double m[], double rR[]) {
@@ -26,13 +30,13 @@ void eval_H(double HField[], double rT[], double m[], double rR[]) {
 }
 
 void optimize_residuals(double residuals[], double rt[], double m[], double rr[], double H_meas[], int MEMORY) {
-    
+    int i = 0;
     
     /* Allocation of memory */
     double *Hfield;
     Hfield = (double*)malloc(3*MEMORY*sizeof(double));
 
-    int i = 0;
+    
     for (i = 0; i < MEMORY; i++) {
       eval_H(&Hfield[3*i], rt, m, &rr[3*i]);  
     }
@@ -63,7 +67,7 @@ void print_dimensions(const mxArray* input, const char* name) {
 
 
 void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
-    
+  int i = 0;  
   double *x, *rr, *m, *rt, *H_meas, *residuals;
   size_t MEMORY;
   
@@ -98,7 +102,6 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
   rt = (double*)malloc(3*MEMORY*sizeof(double));
   m = (double*)malloc(3*MEMORY*sizeof(double));
   
-  int i = 0;
   for(i = 0; i < 3; i++) {
     rt[i] = x[i];
     m[i] = x[3+i];

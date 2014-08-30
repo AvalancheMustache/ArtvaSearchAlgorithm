@@ -25,7 +25,7 @@
   *  -------------------------------------------------------------------------
   * | See matlabroot/simulink/src/sfuntmpl_doc.c for a more detailed template |
   *  ------------------------------------------------------------------------- 
-* Created: Mon Aug 25 17:04:16 2014
+* Created: Sat Aug 30 12:01:49 2014
 */
 #define S_FUNCTION_LEVEL 2
 #define S_FUNCTION_NAME hexacopter_s

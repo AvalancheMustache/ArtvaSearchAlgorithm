@@ -35,6 +35,7 @@ void H_receiver_mdl_Outputs_wrapper(const real_T *rT,
 			real_T *Hstrenght)
 {
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_BEGIN --- EDIT HERE TO _END */
+#define M_1_PI 3.183098861837907e-01
 double x, y, z, r;
 #define PERTURBAZIONE 1e-15
 
