@@ -7,7 +7,7 @@ CPU = AMD64
 
 MACHINE     = hexacopter
 TARGET      = sfun
-CHART_SRCS   = c2_hexacopter.c c4_hexacopter.c c5_hexacopter.c c6_hexacopter.c c7_hexacopter.c c8_hexacopter.c c9_hexacopter.c
+CHART_SRCS   = c1_hexacopter.c c2_hexacopter.c c4_hexacopter.c c5_hexacopter.c c6_hexacopter.c c7_hexacopter.c c8_hexacopter.c c9_hexacopter.c
 MACHINE_SRC  = hexacopter_sfun.c
 MACHINE_REG = hexacopter_sfun_registry.c
 MAKEFILE    = hexacopter_sfun.mak

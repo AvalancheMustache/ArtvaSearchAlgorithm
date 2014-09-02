@@ -25,7 +25,7 @@
   *  -------------------------------------------------------------------------
   * | See matlabroot/simulink/src/sfuntmpl_doc.c for a more detailed template |
   *  ------------------------------------------------------------------------- 
-* Created: Sat Aug 30 12:01:48 2014
+* Created: Tue Sep  2 21:35:05 2014
 */
 #define S_FUNCTION_LEVEL 2
 #define S_FUNCTION_NAME H_receiver_mdl

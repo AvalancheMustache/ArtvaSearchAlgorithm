@@ -20,6 +20,8 @@ typedef struct {
   boolean_T c9_isStable;
   boolean_T c9_doneDoubleBufferReInit;
   uint8_T c9_is_active_c9_hexacopter;
+  real_T c9_V[3];
+  boolean_T c9_V_not_empty;
 } SFc9_hexacopterInstanceStruct;
 
 #endif                                 /*typedef_SFc9_hexacopterInstanceStruct*/

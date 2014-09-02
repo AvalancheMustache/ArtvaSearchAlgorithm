@@ -19,8 +19,8 @@
 
 /* Variable Definitions */
 static real_T _sfTime_;
-static const char * c9_debug_family_names[6] = { "i", "nargin", "nargout",
-  "range", "R_B2G", "y" };
+static const char * c9_debug_family_names[8] = { "alpha", "i", "nargin",
+  "nargout", "range", "R_B2G", "y", "V" };
 
 /* Function Declarations */
 static void initialize_c9_hexacopter(SFc9_hexacopterInstanceStruct
@@ -44,20 +44,28 @@ static void init_script_number_translation(uint32_T c9_machineNumber, uint32_T
   c9_chartNumber, uint32_T c9_instanceNumber);
 static const mxArray *c9_sf_marshallOut(void *chartInstanceVoid, void *c9_inData);
 static void c9_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
-  const mxArray *c9_y, const char_T *c9_identifier, real_T c9_b_y[3]);
+  const mxArray *c9_b_V, const char_T *c9_identifier, real_T c9_y[3]);
 static void c9_b_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
   const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId, real_T c9_y[3]);
 static void c9_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData);
 static const mxArray *c9_b_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData);
+static void c9_c_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
+  const mxArray *c9_y, const char_T *c9_identifier, real_T c9_b_y[3]);
+static void c9_d_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
+  const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId, real_T c9_y[3]);
+static void c9_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
+  *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData);
 static const mxArray *c9_c_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData);
 static const mxArray *c9_d_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData);
-static real_T c9_c_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
+static const mxArray *c9_e_sf_marshallOut(void *chartInstanceVoid, void
+  *c9_inData);
+static real_T c9_e_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
   const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId);
-static void c9_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
+static void c9_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData);
 static void c9_info_helper(const mxArray **c9_info);
 static const mxArray *c9_emlrt_marshallOut(const char * c9_u);
@@ -65,16 +73,16 @@ static const mxArray *c9_b_emlrt_marshallOut(const uint32_T c9_u);
 static void c9_eml_scalar_eg(SFc9_hexacopterInstanceStruct *chartInstance);
 static void c9_eml_xgemm(SFc9_hexacopterInstanceStruct *chartInstance, real_T
   c9_A[9], real_T c9_B[3], real_T c9_C[3], real_T c9_b_C[3]);
-static const mxArray *c9_e_sf_marshallOut(void *chartInstanceVoid, void
+static const mxArray *c9_f_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData);
-static int32_T c9_d_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
+static int32_T c9_f_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
   *chartInstance, const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId);
-static void c9_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
+static void c9_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData);
-static uint8_T c9_e_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
+static uint8_T c9_g_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
   *chartInstance, const mxArray *c9_b_is_active_c9_hexacopter, const char_T
   *c9_identifier);
-static uint8_T c9_f_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
+static uint8_T c9_h_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
   *chartInstance, const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId);
 static void c9_b_eml_xgemm(SFc9_hexacopterInstanceStruct *chartInstance, real_T
   c9_A[9], real_T c9_B[3], real_T c9_C[3]);
@@ -86,6 +94,7 @@ static void initialize_c9_hexacopter(SFc9_hexacopterInstanceStruct
 {
   chartInstance->c9_sfEvent = CALL_EVENT;
   _sfTime_ = sf_get_time(chartInstance->S);
+  chartInstance->c9_V_not_empty = false;
   chartInstance->c9_is_active_c9_hexacopter = 0U;
 }
 
@@ -119,27 +128,44 @@ static const mxArray *get_sim_state_c9_hexacopter(SFc9_hexacopterInstanceStruct 
   int32_T c9_i0;
   real_T c9_u[3];
   const mxArray *c9_b_y = NULL;
-  uint8_T c9_hoistedGlobal;
-  uint8_T c9_b_u;
+  int32_T c9_i1;
+  real_T c9_b_u[3];
   const mxArray *c9_c_y = NULL;
-  real_T (*c9_d_y)[3];
-  c9_d_y = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
+  uint8_T c9_hoistedGlobal;
+  uint8_T c9_c_u;
+  const mxArray *c9_d_y = NULL;
+  real_T (*c9_e_y)[3];
+  c9_e_y = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
   c9_st = NULL;
   c9_st = NULL;
   c9_y = NULL;
-  sf_mex_assign(&c9_y, sf_mex_createcellmatrix(2, 1), false);
+  sf_mex_assign(&c9_y, sf_mex_createcellmatrix(3, 1), false);
   for (c9_i0 = 0; c9_i0 < 3; c9_i0++) {
-    c9_u[c9_i0] = (*c9_d_y)[c9_i0];
+    c9_u[c9_i0] = (*c9_e_y)[c9_i0];
   }
 
   c9_b_y = NULL;
   sf_mex_assign(&c9_b_y, sf_mex_create("y", c9_u, 0, 0U, 1U, 0U, 1, 3), false);
   sf_mex_setcell(c9_y, 0, c9_b_y);
-  c9_hoistedGlobal = chartInstance->c9_is_active_c9_hexacopter;
-  c9_b_u = c9_hoistedGlobal;
+  for (c9_i1 = 0; c9_i1 < 3; c9_i1++) {
+    c9_b_u[c9_i1] = chartInstance->c9_V[c9_i1];
+  }
+
   c9_c_y = NULL;
-  sf_mex_assign(&c9_c_y, sf_mex_create("y", &c9_b_u, 3, 0U, 0U, 0U, 0), false);
+  if (!chartInstance->c9_V_not_empty) {
+    sf_mex_assign(&c9_c_y, sf_mex_create("y", NULL, 0, 0U, 1U, 0U, 2, 0, 0),
+                  false);
+  } else {
+    sf_mex_assign(&c9_c_y, sf_mex_create("y", c9_b_u, 0, 0U, 1U, 0U, 1, 3),
+                  false);
+  }
+
   sf_mex_setcell(c9_y, 1, c9_c_y);
+  c9_hoistedGlobal = chartInstance->c9_is_active_c9_hexacopter;
+  c9_c_u = c9_hoistedGlobal;
+  c9_d_y = NULL;
+  sf_mex_assign(&c9_d_y, sf_mex_create("y", &c9_c_u, 3, 0U, 0U, 0U, 0), false);
+  sf_mex_setcell(c9_y, 2, c9_d_y);
   sf_mex_assign(&c9_st, c9_y, false);
   return c9_st;
 }
@@ -149,19 +175,27 @@ static void set_sim_state_c9_hexacopter(SFc9_hexacopterInstanceStruct
 {
   const mxArray *c9_u;
   real_T c9_dv0[3];
-  int32_T c9_i1;
+  int32_T c9_i2;
+  real_T c9_dv1[3];
+  int32_T c9_i3;
   real_T (*c9_y)[3];
   c9_y = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
   chartInstance->c9_doneDoubleBufferReInit = true;
   c9_u = sf_mex_dup(c9_st);
-  c9_emlrt_marshallIn(chartInstance, sf_mex_dup(sf_mex_getcell(c9_u, 0)), "y",
-                      c9_dv0);
-  for (c9_i1 = 0; c9_i1 < 3; c9_i1++) {
-    (*c9_y)[c9_i1] = c9_dv0[c9_i1];
+  c9_c_emlrt_marshallIn(chartInstance, sf_mex_dup(sf_mex_getcell(c9_u, 0)), "y",
+                        c9_dv0);
+  for (c9_i2 = 0; c9_i2 < 3; c9_i2++) {
+    (*c9_y)[c9_i2] = c9_dv0[c9_i2];
   }
 
-  chartInstance->c9_is_active_c9_hexacopter = c9_e_emlrt_marshallIn
-    (chartInstance, sf_mex_dup(sf_mex_getcell(c9_u, 1)),
+  c9_emlrt_marshallIn(chartInstance, sf_mex_dup(sf_mex_getcell(c9_u, 1)), "V",
+                      c9_dv1);
+  for (c9_i3 = 0; c9_i3 < 3; c9_i3++) {
+    chartInstance->c9_V[c9_i3] = c9_dv1[c9_i3];
+  }
+
+  chartInstance->c9_is_active_c9_hexacopter = c9_g_emlrt_marshallIn
+    (chartInstance, sf_mex_dup(sf_mex_getcell(c9_u, 2)),
      "is_active_c9_hexacopter");
   sf_mex_destroy(&c9_u);
   c9_update_debugger_state_c9_hexacopter(chartInstance);
@@ -176,17 +210,19 @@ static void finalize_c9_hexacopter(SFc9_hexacopterInstanceStruct *chartInstance)
 static void sf_gateway_c9_hexacopter(SFc9_hexacopterInstanceStruct
   *chartInstance)
 {
-  int32_T c9_i2;
-  int32_T c9_i3;
-  real_T c9_range[6];
   int32_T c9_i4;
+  int32_T c9_i5;
+  real_T c9_range[6];
+  int32_T c9_i6;
   real_T c9_R_B2G[9];
-  uint32_T c9_debug_family_var_map[6];
+  uint32_T c9_debug_family_var_map[8];
+  real_T c9_alpha;
   real_T c9_i;
   real_T c9_nargin = 2.0;
   real_T c9_nargout = 1.0;
   real_T c9_y[3];
-  int32_T c9_i5;
+  int32_T c9_i7;
+  int32_T c9_i8;
   int32_T c9_b_i;
   real_T c9_B;
   real_T c9_b_y;
@@ -208,72 +244,89 @@ static void sf_gateway_c9_hexacopter(SFc9_hexacopterInstanceStruct
   real_T c9_i_x;
   real_T c9_j_x;
   real_T c9_k_x[3];
-  int32_T c9_i6;
-  int32_T c9_i7;
-  real_T c9_a[9];
-  int32_T c9_i8;
-  real_T c9_b[3];
   int32_T c9_i9;
   int32_T c9_i10;
+  real_T c9_b[9];
   int32_T c9_i11;
-  real_T c9_dv1[9];
   int32_T c9_i12;
-  real_T c9_dv2[3];
+  real_T c9_b_b[3];
   int32_T c9_i13;
-  real_T c9_dv3[9];
+  real_T c9_h_y[3];
   int32_T c9_i14;
-  real_T c9_dv4[3];
+  real_T c9_c_b[9];
   int32_T c9_i15;
+  real_T c9_d_b[3];
   int32_T c9_i16;
   int32_T c9_i17;
-  real_T (*c9_h_y)[3];
+  int32_T c9_i18;
+  int32_T c9_i19;
+  int32_T c9_i20;
+  int32_T c9_i21;
+  int32_T c9_i22;
+  real_T (*c9_i_y)[3];
   real_T (*c9_b_R_B2G)[9];
   real_T (*c9_b_range)[6];
   c9_b_R_B2G = (real_T (*)[9])ssGetInputPortSignal(chartInstance->S, 1);
-  c9_h_y = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
+  c9_i_y = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
   c9_b_range = (real_T (*)[6])ssGetInputPortSignal(chartInstance->S, 0);
   _SFD_SYMBOL_SCOPE_PUSH(0U, 0U);
   _sfTime_ = sf_get_time(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 6U, chartInstance->c9_sfEvent);
-  for (c9_i2 = 0; c9_i2 < 6; c9_i2++) {
-    _SFD_DATA_RANGE_CHECK((*c9_b_range)[c9_i2], 0U);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 7U, chartInstance->c9_sfEvent);
+  for (c9_i4 = 0; c9_i4 < 6; c9_i4++) {
+    _SFD_DATA_RANGE_CHECK((*c9_b_range)[c9_i4], 0U);
   }
 
   chartInstance->c9_sfEvent = CALL_EVENT;
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 6U, chartInstance->c9_sfEvent);
-  for (c9_i3 = 0; c9_i3 < 6; c9_i3++) {
-    c9_range[c9_i3] = (*c9_b_range)[c9_i3];
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 7U, chartInstance->c9_sfEvent);
+  for (c9_i5 = 0; c9_i5 < 6; c9_i5++) {
+    c9_range[c9_i5] = (*c9_b_range)[c9_i5];
   }
 
-  for (c9_i4 = 0; c9_i4 < 9; c9_i4++) {
-    c9_R_B2G[c9_i4] = (*c9_b_R_B2G)[c9_i4];
+  for (c9_i6 = 0; c9_i6 < 9; c9_i6++) {
+    c9_R_B2G[c9_i6] = (*c9_b_R_B2G)[c9_i6];
   }
 
-  _SFD_SYMBOL_SCOPE_PUSH_EML(0U, 6U, 6U, c9_debug_family_names,
+  _SFD_SYMBOL_SCOPE_PUSH_EML(0U, 8U, 8U, c9_debug_family_names,
     c9_debug_family_var_map);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c9_i, 0U, c9_d_sf_marshallOut,
+  _SFD_SYMBOL_SCOPE_ADD_EML(&c9_alpha, 0U, c9_e_sf_marshallOut);
+  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c9_i, 1U, c9_e_sf_marshallOut,
+    c9_c_sf_marshallIn);
+  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c9_nargin, 2U, c9_e_sf_marshallOut,
+    c9_c_sf_marshallIn);
+  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c9_nargout, 3U, c9_e_sf_marshallOut,
+    c9_c_sf_marshallIn);
+  _SFD_SYMBOL_SCOPE_ADD_EML(c9_range, 4U, c9_d_sf_marshallOut);
+  _SFD_SYMBOL_SCOPE_ADD_EML(c9_R_B2G, 5U, c9_c_sf_marshallOut);
+  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(c9_y, 6U, c9_b_sf_marshallOut,
     c9_b_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c9_nargin, 1U, c9_d_sf_marshallOut,
-    c9_b_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c9_nargout, 2U, c9_d_sf_marshallOut,
-    c9_b_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML(c9_range, 3U, c9_c_sf_marshallOut);
-  _SFD_SYMBOL_SCOPE_ADD_EML(c9_R_B2G, 4U, c9_b_sf_marshallOut);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(c9_y, 5U, c9_sf_marshallOut,
-    c9_sf_marshallIn);
+  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(chartInstance->c9_V, 7U,
+    c9_sf_marshallOut, c9_sf_marshallIn);
   CV_EML_FCN(0, 0);
   _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 3);
-  for (c9_i5 = 0; c9_i5 < 3; c9_i5++) {
-    c9_y[c9_i5] = 0.0;
+  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 4);
+  if (CV_EML_IF(0, 1, 0, !chartInstance->c9_V_not_empty)) {
+    _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 5);
+    for (c9_i7 = 0; c9_i7 < 3; c9_i7++) {
+      chartInstance->c9_V[c9_i7] = 0.0;
+    }
+
+    chartInstance->c9_V_not_empty = true;
   }
 
-  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 4);
+  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 8);
+  c9_alpha = 0.3;
+  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 10);
+  for (c9_i8 = 0; c9_i8 < 3; c9_i8++) {
+    c9_y[c9_i8] = 0.0;
+  }
+
+  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 11);
   c9_i = 1.0;
   c9_b_i = 0;
   while (c9_b_i < 6) {
     c9_i = 1.0 + (real_T)c9_b_i;
     CV_EML_FOR(0, 1, 0, 1);
-    _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 5);
+    _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 12);
     c9_B = c9_range[_SFD_EML_ARRAY_BOUNDS_CHECK("range", (int32_T)
       _SFD_INTEGER_CHECK("i", c9_i), 1, 6, 1, 0) - 1];
     c9_b_y = c9_B;
@@ -299,8 +352,8 @@ static void sf_gateway_c9_hexacopter(SFc9_hexacopterInstanceStruct
     c9_k_x[0] = c9_e_x;
     c9_k_x[1] = -c9_j_x;
     c9_k_x[2] = 0.0;
-    for (c9_i6 = 0; c9_i6 < 3; c9_i6++) {
-      c9_y[c9_i6] -= c9_e_y * c9_k_x[c9_i6];
+    for (c9_i9 = 0; c9_i9 < 3; c9_i9++) {
+      c9_y[c9_i9] -= c9_e_y * c9_k_x[c9_i9];
     }
 
     c9_b_i++;
@@ -308,58 +361,67 @@ static void sf_gateway_c9_hexacopter(SFc9_hexacopterInstanceStruct
   }
 
   CV_EML_FOR(0, 1, 0, 0);
-  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 7);
-  for (c9_i7 = 0; c9_i7 < 9; c9_i7++) {
-    c9_a[c9_i7] = c9_R_B2G[c9_i7];
-  }
-
-  for (c9_i8 = 0; c9_i8 < 3; c9_i8++) {
-    c9_b[c9_i8] = c9_y[c9_i8];
-  }
-
-  c9_eml_scalar_eg(chartInstance);
-  c9_eml_scalar_eg(chartInstance);
-  for (c9_i9 = 0; c9_i9 < 3; c9_i9++) {
-    c9_y[c9_i9] = 0.0;
-  }
-
-  for (c9_i10 = 0; c9_i10 < 3; c9_i10++) {
-    c9_y[c9_i10] = 0.0;
+  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 14);
+  for (c9_i10 = 0; c9_i10 < 9; c9_i10++) {
+    c9_b[c9_i10] = c9_R_B2G[c9_i10];
   }
 
   for (c9_i11 = 0; c9_i11 < 9; c9_i11++) {
-    c9_dv1[c9_i11] = c9_a[c9_i11];
+    c9_b[c9_i11] *= 0.3;
   }
 
   for (c9_i12 = 0; c9_i12 < 3; c9_i12++) {
-    c9_dv2[c9_i12] = c9_b[c9_i12];
+    c9_b_b[c9_i12] = c9_y[c9_i12];
   }
 
-  for (c9_i13 = 0; c9_i13 < 9; c9_i13++) {
-    c9_dv3[c9_i13] = c9_dv1[c9_i13];
+  c9_eml_scalar_eg(chartInstance);
+  c9_eml_scalar_eg(chartInstance);
+  for (c9_i13 = 0; c9_i13 < 3; c9_i13++) {
+    c9_h_y[c9_i13] = 0.0;
   }
 
-  for (c9_i14 = 0; c9_i14 < 3; c9_i14++) {
-    c9_dv4[c9_i14] = c9_dv2[c9_i14];
+  for (c9_i14 = 0; c9_i14 < 9; c9_i14++) {
+    c9_c_b[c9_i14] = c9_b[c9_i14];
   }
 
-  c9_b_eml_xgemm(chartInstance, c9_dv3, c9_dv4, c9_y);
-  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, -7);
-  _SFD_SYMBOL_SCOPE_POP();
   for (c9_i15 = 0; c9_i15 < 3; c9_i15++) {
-    (*c9_h_y)[c9_i15] = c9_y[c9_i15];
+    c9_d_b[c9_i15] = c9_b_b[c9_i15];
   }
 
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 6U, chartInstance->c9_sfEvent);
+  c9_b_eml_xgemm(chartInstance, c9_c_b, c9_d_b, c9_h_y);
+  for (c9_i16 = 0; c9_i16 < 3; c9_i16++) {
+    c9_b_b[c9_i16] = chartInstance->c9_V[c9_i16];
+  }
+
+  for (c9_i17 = 0; c9_i17 < 3; c9_i17++) {
+    c9_b_b[c9_i17] *= 0.7;
+  }
+
+  for (c9_i18 = 0; c9_i18 < 3; c9_i18++) {
+    chartInstance->c9_V[c9_i18] = c9_h_y[c9_i18] + c9_b_b[c9_i18];
+  }
+
+  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, 15);
+  for (c9_i19 = 0; c9_i19 < 3; c9_i19++) {
+    c9_y[c9_i19] = chartInstance->c9_V[c9_i19];
+  }
+
+  _SFD_EML_CALL(0U, chartInstance->c9_sfEvent, -15);
+  _SFD_SYMBOL_SCOPE_POP();
+  for (c9_i20 = 0; c9_i20 < 3; c9_i20++) {
+    (*c9_i_y)[c9_i20] = c9_y[c9_i20];
+  }
+
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 7U, chartInstance->c9_sfEvent);
   _SFD_SYMBOL_SCOPE_POP();
   _SFD_CHECK_FOR_STATE_INCONSISTENCY(_hexacopterMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
-  for (c9_i16 = 0; c9_i16 < 3; c9_i16++) {
-    _SFD_DATA_RANGE_CHECK((*c9_h_y)[c9_i16], 1U);
+  for (c9_i21 = 0; c9_i21 < 3; c9_i21++) {
+    _SFD_DATA_RANGE_CHECK((*c9_i_y)[c9_i21], 1U);
   }
 
-  for (c9_i17 = 0; c9_i17 < 9; c9_i17++) {
-    _SFD_DATA_RANGE_CHECK((*c9_b_R_B2G)[c9_i17], 2U);
+  for (c9_i22 = 0; c9_i22 < 9; c9_i22++) {
+    _SFD_DATA_RANGE_CHECK((*c9_b_R_B2G)[c9_i22], 2U);
   }
 }
 
@@ -380,47 +442,56 @@ static void init_script_number_translation(uint32_T c9_machineNumber, uint32_T
 static const mxArray *c9_sf_marshallOut(void *chartInstanceVoid, void *c9_inData)
 {
   const mxArray *c9_mxArrayOutData = NULL;
-  int32_T c9_i18;
+  int32_T c9_i23;
   real_T c9_b_inData[3];
-  int32_T c9_i19;
+  int32_T c9_i24;
   real_T c9_u[3];
   const mxArray *c9_y = NULL;
   SFc9_hexacopterInstanceStruct *chartInstance;
   chartInstance = (SFc9_hexacopterInstanceStruct *)chartInstanceVoid;
   c9_mxArrayOutData = NULL;
-  for (c9_i18 = 0; c9_i18 < 3; c9_i18++) {
-    c9_b_inData[c9_i18] = (*(real_T (*)[3])c9_inData)[c9_i18];
+  for (c9_i23 = 0; c9_i23 < 3; c9_i23++) {
+    c9_b_inData[c9_i23] = (*(real_T (*)[3])c9_inData)[c9_i23];
   }
 
-  for (c9_i19 = 0; c9_i19 < 3; c9_i19++) {
-    c9_u[c9_i19] = c9_b_inData[c9_i19];
+  for (c9_i24 = 0; c9_i24 < 3; c9_i24++) {
+    c9_u[c9_i24] = c9_b_inData[c9_i24];
   }
 
   c9_y = NULL;
-  sf_mex_assign(&c9_y, sf_mex_create("y", c9_u, 0, 0U, 1U, 0U, 1, 3), false);
+  if (!chartInstance->c9_V_not_empty) {
+    sf_mex_assign(&c9_y, sf_mex_create("y", NULL, 0, 0U, 1U, 0U, 2, 0, 0), false);
+  } else {
+    sf_mex_assign(&c9_y, sf_mex_create("y", c9_u, 0, 0U, 1U, 0U, 1, 3), false);
+  }
+
   sf_mex_assign(&c9_mxArrayOutData, c9_y, false);
   return c9_mxArrayOutData;
 }
 
 static void c9_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
-  const mxArray *c9_y, const char_T *c9_identifier, real_T c9_b_y[3])
+  const mxArray *c9_b_V, const char_T *c9_identifier, real_T c9_y[3])
 {
   emlrtMsgIdentifier c9_thisId;
   c9_thisId.fIdentifier = c9_identifier;
   c9_thisId.fParent = NULL;
-  c9_b_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_y), &c9_thisId, c9_b_y);
-  sf_mex_destroy(&c9_y);
+  c9_b_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_b_V), &c9_thisId, c9_y);
+  sf_mex_destroy(&c9_b_V);
 }
 
 static void c9_b_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
   const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId, real_T c9_y[3])
 {
-  real_T c9_dv5[3];
-  int32_T c9_i20;
-  (void)chartInstance;
-  sf_mex_import(c9_parentId, sf_mex_dup(c9_u), c9_dv5, 1, 0, 0U, 1, 0U, 1, 3);
-  for (c9_i20 = 0; c9_i20 < 3; c9_i20++) {
-    c9_y[c9_i20] = c9_dv5[c9_i20];
+  real_T c9_dv2[3];
+  int32_T c9_i25;
+  if (mxIsEmpty(c9_u)) {
+    chartInstance->c9_V_not_empty = false;
+  } else {
+    chartInstance->c9_V_not_empty = true;
+    sf_mex_import(c9_parentId, sf_mex_dup(c9_u), c9_dv2, 1, 0, 0U, 1, 0U, 1, 3);
+    for (c9_i25 = 0; c9_i25 < 3; c9_i25++) {
+      c9_y[c9_i25] = c9_dv2[c9_i25];
+    }
   }
 
   sf_mex_destroy(&c9_u);
@@ -429,21 +500,21 @@ static void c9_b_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
 static void c9_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData)
 {
-  const mxArray *c9_y;
+  const mxArray *c9_b_V;
   const char_T *c9_identifier;
   emlrtMsgIdentifier c9_thisId;
-  real_T c9_b_y[3];
-  int32_T c9_i21;
+  real_T c9_y[3];
+  int32_T c9_i26;
   SFc9_hexacopterInstanceStruct *chartInstance;
   chartInstance = (SFc9_hexacopterInstanceStruct *)chartInstanceVoid;
-  c9_y = sf_mex_dup(c9_mxArrayInData);
+  c9_b_V = sf_mex_dup(c9_mxArrayInData);
   c9_identifier = c9_varName;
   c9_thisId.fIdentifier = c9_identifier;
   c9_thisId.fParent = NULL;
-  c9_b_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_y), &c9_thisId, c9_b_y);
-  sf_mex_destroy(&c9_y);
-  for (c9_i21 = 0; c9_i21 < 3; c9_i21++) {
-    (*(real_T (*)[3])c9_outData)[c9_i21] = c9_b_y[c9_i21];
+  c9_b_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_b_V), &c9_thisId, c9_y);
+  sf_mex_destroy(&c9_b_V);
+  for (c9_i26 = 0; c9_i26 < 3; c9_i26++) {
+    (*(real_T (*)[3])c9_outData)[c9_i26] = c9_y[c9_i26];
   }
 
   sf_mex_destroy(&c9_mxArrayInData);
@@ -453,34 +524,107 @@ static const mxArray *c9_b_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData)
 {
   const mxArray *c9_mxArrayOutData = NULL;
-  int32_T c9_i22;
-  int32_T c9_i23;
-  int32_T c9_i24;
-  real_T c9_b_inData[9];
-  int32_T c9_i25;
-  int32_T c9_i26;
   int32_T c9_i27;
+  real_T c9_b_inData[3];
+  int32_T c9_i28;
+  real_T c9_u[3];
+  const mxArray *c9_y = NULL;
+  SFc9_hexacopterInstanceStruct *chartInstance;
+  chartInstance = (SFc9_hexacopterInstanceStruct *)chartInstanceVoid;
+  c9_mxArrayOutData = NULL;
+  for (c9_i27 = 0; c9_i27 < 3; c9_i27++) {
+    c9_b_inData[c9_i27] = (*(real_T (*)[3])c9_inData)[c9_i27];
+  }
+
+  for (c9_i28 = 0; c9_i28 < 3; c9_i28++) {
+    c9_u[c9_i28] = c9_b_inData[c9_i28];
+  }
+
+  c9_y = NULL;
+  sf_mex_assign(&c9_y, sf_mex_create("y", c9_u, 0, 0U, 1U, 0U, 1, 3), false);
+  sf_mex_assign(&c9_mxArrayOutData, c9_y, false);
+  return c9_mxArrayOutData;
+}
+
+static void c9_c_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
+  const mxArray *c9_y, const char_T *c9_identifier, real_T c9_b_y[3])
+{
+  emlrtMsgIdentifier c9_thisId;
+  c9_thisId.fIdentifier = c9_identifier;
+  c9_thisId.fParent = NULL;
+  c9_d_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_y), &c9_thisId, c9_b_y);
+  sf_mex_destroy(&c9_y);
+}
+
+static void c9_d_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
+  const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId, real_T c9_y[3])
+{
+  real_T c9_dv3[3];
+  int32_T c9_i29;
+  (void)chartInstance;
+  sf_mex_import(c9_parentId, sf_mex_dup(c9_u), c9_dv3, 1, 0, 0U, 1, 0U, 1, 3);
+  for (c9_i29 = 0; c9_i29 < 3; c9_i29++) {
+    c9_y[c9_i29] = c9_dv3[c9_i29];
+  }
+
+  sf_mex_destroy(&c9_u);
+}
+
+static void c9_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
+  *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData)
+{
+  const mxArray *c9_y;
+  const char_T *c9_identifier;
+  emlrtMsgIdentifier c9_thisId;
+  real_T c9_b_y[3];
+  int32_T c9_i30;
+  SFc9_hexacopterInstanceStruct *chartInstance;
+  chartInstance = (SFc9_hexacopterInstanceStruct *)chartInstanceVoid;
+  c9_y = sf_mex_dup(c9_mxArrayInData);
+  c9_identifier = c9_varName;
+  c9_thisId.fIdentifier = c9_identifier;
+  c9_thisId.fParent = NULL;
+  c9_d_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_y), &c9_thisId, c9_b_y);
+  sf_mex_destroy(&c9_y);
+  for (c9_i30 = 0; c9_i30 < 3; c9_i30++) {
+    (*(real_T (*)[3])c9_outData)[c9_i30] = c9_b_y[c9_i30];
+  }
+
+  sf_mex_destroy(&c9_mxArrayInData);
+}
+
+static const mxArray *c9_c_sf_marshallOut(void *chartInstanceVoid, void
+  *c9_inData)
+{
+  const mxArray *c9_mxArrayOutData = NULL;
+  int32_T c9_i31;
+  int32_T c9_i32;
+  int32_T c9_i33;
+  real_T c9_b_inData[9];
+  int32_T c9_i34;
+  int32_T c9_i35;
+  int32_T c9_i36;
   real_T c9_u[9];
   const mxArray *c9_y = NULL;
   SFc9_hexacopterInstanceStruct *chartInstance;
   chartInstance = (SFc9_hexacopterInstanceStruct *)chartInstanceVoid;
   c9_mxArrayOutData = NULL;
-  c9_i22 = 0;
-  for (c9_i23 = 0; c9_i23 < 3; c9_i23++) {
-    for (c9_i24 = 0; c9_i24 < 3; c9_i24++) {
-      c9_b_inData[c9_i24 + c9_i22] = (*(real_T (*)[9])c9_inData)[c9_i24 + c9_i22];
+  c9_i31 = 0;
+  for (c9_i32 = 0; c9_i32 < 3; c9_i32++) {
+    for (c9_i33 = 0; c9_i33 < 3; c9_i33++) {
+      c9_b_inData[c9_i33 + c9_i31] = (*(real_T (*)[9])c9_inData)[c9_i33 + c9_i31];
     }
 
-    c9_i22 += 3;
+    c9_i31 += 3;
   }
 
-  c9_i25 = 0;
-  for (c9_i26 = 0; c9_i26 < 3; c9_i26++) {
-    for (c9_i27 = 0; c9_i27 < 3; c9_i27++) {
-      c9_u[c9_i27 + c9_i25] = c9_b_inData[c9_i27 + c9_i25];
+  c9_i34 = 0;
+  for (c9_i35 = 0; c9_i35 < 3; c9_i35++) {
+    for (c9_i36 = 0; c9_i36 < 3; c9_i36++) {
+      c9_u[c9_i36 + c9_i34] = c9_b_inData[c9_i36 + c9_i34];
     }
 
-    c9_i25 += 3;
+    c9_i34 += 3;
   }
 
   c9_y = NULL;
@@ -489,33 +633,33 @@ static const mxArray *c9_b_sf_marshallOut(void *chartInstanceVoid, void
   return c9_mxArrayOutData;
 }
 
-static const mxArray *c9_c_sf_marshallOut(void *chartInstanceVoid, void
+static const mxArray *c9_d_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData)
 {
   const mxArray *c9_mxArrayOutData = NULL;
-  int32_T c9_i28;
+  int32_T c9_i37;
   real_T c9_b_inData[6];
-  int32_T c9_i29;
+  int32_T c9_i38;
   real_T c9_u[6];
   const mxArray *c9_y = NULL;
   SFc9_hexacopterInstanceStruct *chartInstance;
   chartInstance = (SFc9_hexacopterInstanceStruct *)chartInstanceVoid;
   c9_mxArrayOutData = NULL;
-  for (c9_i28 = 0; c9_i28 < 6; c9_i28++) {
-    c9_b_inData[c9_i28] = (*(real_T (*)[6])c9_inData)[c9_i28];
+  for (c9_i37 = 0; c9_i37 < 6; c9_i37++) {
+    c9_b_inData[c9_i37] = (*(real_T (*)[6])c9_inData)[c9_i37];
   }
 
-  for (c9_i29 = 0; c9_i29 < 6; c9_i29++) {
-    c9_u[c9_i29] = c9_b_inData[c9_i29];
+  for (c9_i38 = 0; c9_i38 < 6; c9_i38++) {
+    c9_u[c9_i38] = c9_b_inData[c9_i38];
   }
 
   c9_y = NULL;
-  sf_mex_assign(&c9_y, sf_mex_create("y", c9_u, 0, 0U, 1U, 0U, 1, 6), false);
+  sf_mex_assign(&c9_y, sf_mex_create("y", c9_u, 0, 0U, 1U, 0U, 2, 6, 1), false);
   sf_mex_assign(&c9_mxArrayOutData, c9_y, false);
   return c9_mxArrayOutData;
 }
 
-static const mxArray *c9_d_sf_marshallOut(void *chartInstanceVoid, void
+static const mxArray *c9_e_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData)
 {
   const mxArray *c9_mxArrayOutData = NULL;
@@ -531,7 +675,7 @@ static const mxArray *c9_d_sf_marshallOut(void *chartInstanceVoid, void
   return c9_mxArrayOutData;
 }
 
-static real_T c9_c_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
+static real_T c9_e_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance,
   const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId)
 {
   real_T c9_y;
@@ -543,7 +687,7 @@ static real_T c9_c_emlrt_marshallIn(SFc9_hexacopterInstanceStruct *chartInstance
   return c9_y;
 }
 
-static void c9_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
+static void c9_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData)
 {
   const mxArray *c9_nargout;
@@ -556,7 +700,7 @@ static void c9_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   c9_identifier = c9_varName;
   c9_thisId.fIdentifier = c9_identifier;
   c9_thisId.fParent = NULL;
-  c9_y = c9_c_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_nargout), &c9_thisId);
+  c9_y = c9_e_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_nargout), &c9_thisId);
   sf_mex_destroy(&c9_nargout);
   *(real_T *)c9_outData = c9_y;
   sf_mex_destroy(&c9_mxArrayInData);
@@ -1241,27 +1385,27 @@ static void c9_eml_scalar_eg(SFc9_hexacopterInstanceStruct *chartInstance)
 static void c9_eml_xgemm(SFc9_hexacopterInstanceStruct *chartInstance, real_T
   c9_A[9], real_T c9_B[3], real_T c9_C[3], real_T c9_b_C[3])
 {
-  int32_T c9_i30;
-  int32_T c9_i31;
+  int32_T c9_i39;
+  int32_T c9_i40;
   real_T c9_b_A[9];
-  int32_T c9_i32;
+  int32_T c9_i41;
   real_T c9_b_B[3];
-  for (c9_i30 = 0; c9_i30 < 3; c9_i30++) {
-    c9_b_C[c9_i30] = c9_C[c9_i30];
+  for (c9_i39 = 0; c9_i39 < 3; c9_i39++) {
+    c9_b_C[c9_i39] = c9_C[c9_i39];
   }
 
-  for (c9_i31 = 0; c9_i31 < 9; c9_i31++) {
-    c9_b_A[c9_i31] = c9_A[c9_i31];
+  for (c9_i40 = 0; c9_i40 < 9; c9_i40++) {
+    c9_b_A[c9_i40] = c9_A[c9_i40];
   }
 
-  for (c9_i32 = 0; c9_i32 < 3; c9_i32++) {
-    c9_b_B[c9_i32] = c9_B[c9_i32];
+  for (c9_i41 = 0; c9_i41 < 3; c9_i41++) {
+    c9_b_B[c9_i41] = c9_B[c9_i41];
   }
 
   c9_b_eml_xgemm(chartInstance, c9_b_A, c9_b_B, c9_b_C);
 }
 
-static const mxArray *c9_e_sf_marshallOut(void *chartInstanceVoid, void
+static const mxArray *c9_f_sf_marshallOut(void *chartInstanceVoid, void
   *c9_inData)
 {
   const mxArray *c9_mxArrayOutData = NULL;
@@ -1277,19 +1421,19 @@ static const mxArray *c9_e_sf_marshallOut(void *chartInstanceVoid, void
   return c9_mxArrayOutData;
 }
 
-static int32_T c9_d_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
+static int32_T c9_f_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
   *chartInstance, const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId)
 {
   int32_T c9_y;
-  int32_T c9_i33;
+  int32_T c9_i42;
   (void)chartInstance;
-  sf_mex_import(c9_parentId, sf_mex_dup(c9_u), &c9_i33, 1, 6, 0U, 0, 0U, 0);
-  c9_y = c9_i33;
+  sf_mex_import(c9_parentId, sf_mex_dup(c9_u), &c9_i42, 1, 6, 0U, 0, 0U, 0);
+  c9_y = c9_i42;
   sf_mex_destroy(&c9_u);
   return c9_y;
 }
 
-static void c9_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
+static void c9_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c9_mxArrayInData, const char_T *c9_varName, void *c9_outData)
 {
   const mxArray *c9_b_sfEvent;
@@ -1302,14 +1446,14 @@ static void c9_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
   c9_identifier = c9_varName;
   c9_thisId.fIdentifier = c9_identifier;
   c9_thisId.fParent = NULL;
-  c9_y = c9_d_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_b_sfEvent),
+  c9_y = c9_f_emlrt_marshallIn(chartInstance, sf_mex_dup(c9_b_sfEvent),
     &c9_thisId);
   sf_mex_destroy(&c9_b_sfEvent);
   *(int32_T *)c9_outData = c9_y;
   sf_mex_destroy(&c9_mxArrayInData);
 }
 
-static uint8_T c9_e_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
+static uint8_T c9_g_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
   *chartInstance, const mxArray *c9_b_is_active_c9_hexacopter, const char_T
   *c9_identifier)
 {
@@ -1317,13 +1461,13 @@ static uint8_T c9_e_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
   emlrtMsgIdentifier c9_thisId;
   c9_thisId.fIdentifier = c9_identifier;
   c9_thisId.fParent = NULL;
-  c9_y = c9_f_emlrt_marshallIn(chartInstance, sf_mex_dup
+  c9_y = c9_h_emlrt_marshallIn(chartInstance, sf_mex_dup
     (c9_b_is_active_c9_hexacopter), &c9_thisId);
   sf_mex_destroy(&c9_b_is_active_c9_hexacopter);
   return c9_y;
 }
 
-static uint8_T c9_f_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
+static uint8_T c9_h_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
   *chartInstance, const mxArray *c9_u, const emlrtMsgIdentifier *c9_parentId)
 {
   uint8_T c9_y;
@@ -1338,16 +1482,16 @@ static uint8_T c9_f_emlrt_marshallIn(SFc9_hexacopterInstanceStruct
 static void c9_b_eml_xgemm(SFc9_hexacopterInstanceStruct *chartInstance, real_T
   c9_A[9], real_T c9_B[3], real_T c9_C[3])
 {
-  int32_T c9_i34;
-  int32_T c9_i35;
-  int32_T c9_i36;
+  int32_T c9_i43;
+  int32_T c9_i44;
+  int32_T c9_i45;
   (void)chartInstance;
-  for (c9_i34 = 0; c9_i34 < 3; c9_i34++) {
-    c9_C[c9_i34] = 0.0;
-    c9_i35 = 0;
-    for (c9_i36 = 0; c9_i36 < 3; c9_i36++) {
-      c9_C[c9_i34] += c9_A[c9_i35 + c9_i34] * c9_B[c9_i36];
-      c9_i35 += 3;
+  for (c9_i43 = 0; c9_i43 < 3; c9_i43++) {
+    c9_C[c9_i43] = 0.0;
+    c9_i44 = 0;
+    for (c9_i45 = 0; c9_i45 < 3; c9_i45++) {
+      c9_C[c9_i43] += c9_A[c9_i44 + c9_i43] * c9_B[c9_i45];
+      c9_i44 += 3;
     }
   }
 }
@@ -1380,10 +1524,10 @@ extern void utFree(void*);
 
 void sf_c9_hexacopter_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3773713250U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2200787334U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2049223829U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3766330257U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3438252801U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3174474119U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(3580299115U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1343538286U);
 }
 
 mxArray *sf_c9_hexacopter_get_autoinheritance_info(void)
@@ -1395,7 +1539,7 @@ mxArray *sf_c9_hexacopter_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("YksY1EZyahBOw4qReXU5y");
+    mxArray *mxChecksum = mxCreateString("GT3JEWFQxi4GtZ9UpH1QYD");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -1500,10 +1644,10 @@ static const mxArray *sf_get_sim_state_info_c9_hexacopter(void)
 
   mxArray *mxInfo = mxCreateStructMatrix(1, 1, 2, infoFields);
   const char *infoEncStr[] = {
-    "100 S1x2'type','srcId','name','auxInfo'{{M[1],M[5],T\"y\",},{M[8],M[0],T\"is_active_c9_hexacopter\",}}"
+    "100 S1x3'type','srcId','name','auxInfo'{{M[1],M[5],T\"y\",},{M[4],M[0],T\"V\",S'l','i','p'{{M1x2[66 67],M[0],}}},{M[8],M[0],T\"is_active_c9_hexacopter\",}}"
   };
 
-  mxArray *mxVarInfo = sf_mex_decode_encoded_mx_struct_array(infoEncStr, 2, 10);
+  mxArray *mxVarInfo = sf_mex_decode_encoded_mx_struct_array(infoEncStr, 3, 10);
   mxArray *mxChecksum = mxCreateDoubleMatrix(1, 4, mxREAL);
   sf_c9_hexacopter_get_check_sum(&mxChecksum);
   mxSetField(mxInfo, 0, infoFields[0], mxChecksum);
@@ -1571,23 +1715,25 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
         _SFD_CV_INIT_TRANS(0,0,NULL,NULL,0,NULL);
 
         /* Initialization of MATLAB Function Model Coverage */
-        _SFD_CV_INIT_EML(0,1,1,0,0,0,0,1,0,0,0);
-        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,179);
-        _SFD_CV_INIT_EML_FOR(0,1,0,75,85,162);
+        _SFD_CV_INIT_EML(0,1,1,1,0,0,0,1,0,0,0);
+        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,298);
+        _SFD_CV_INIT_EML_IF(0,1,0,73,86,-1,118);
+        _SFD_CV_INIT_EML_FOR(0,1,0,162,172,249);
 
         {
-          unsigned int dimVector[1];
+          unsigned int dimVector[2];
           dimVector[0]= 6;
-          _SFD_SET_DATA_COMPILED_PROPS(0,SF_DOUBLE,1,&(dimVector[0]),0,0,0,0.0,
-            1.0,0,0,(MexFcnForType)c9_c_sf_marshallOut,(MexInFcnForType)NULL);
+          dimVector[1]= 1;
+          _SFD_SET_DATA_COMPILED_PROPS(0,SF_DOUBLE,2,&(dimVector[0]),0,0,0,0.0,
+            1.0,0,0,(MexFcnForType)c9_d_sf_marshallOut,(MexInFcnForType)NULL);
         }
 
         {
           unsigned int dimVector[1];
           dimVector[0]= 3;
           _SFD_SET_DATA_COMPILED_PROPS(1,SF_DOUBLE,1,&(dimVector[0]),0,0,0,0.0,
-            1.0,0,0,(MexFcnForType)c9_sf_marshallOut,(MexInFcnForType)
-            c9_sf_marshallIn);
+            1.0,0,0,(MexFcnForType)c9_b_sf_marshallOut,(MexInFcnForType)
+            c9_b_sf_marshallIn);
         }
 
         {
@@ -1595,7 +1741,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
           dimVector[0]= 3;
           dimVector[1]= 3;
           _SFD_SET_DATA_COMPILED_PROPS(2,SF_DOUBLE,2,&(dimVector[0]),0,0,0,0.0,
-            1.0,0,0,(MexFcnForType)c9_b_sf_marshallOut,(MexInFcnForType)NULL);
+            1.0,0,0,(MexFcnForType)c9_c_sf_marshallOut,(MexInFcnForType)NULL);
         }
 
         {
@@ -1620,7 +1766,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "y0KsrcKQ0xQjiHnrtfCsTE";
+  return "ZMbtjbhthHo1d7vvFYAZDC";
 }
 
 static void sf_opaque_initialize_c9_hexacopter(void *chartInstanceVar)
@@ -1795,10 +1941,10 @@ static void mdlSetWorkWidths_c9_hexacopter(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(126618131U));
-  ssSetChecksum1(S,(3270186204U));
-  ssSetChecksum2(S,(231485540U));
-  ssSetChecksum3(S,(3742625107U));
+  ssSetChecksum0(S,(655282278U));
+  ssSetChecksum1(S,(1420832039U));
+  ssSetChecksum2(S,(599220949U));
+  ssSetChecksum3(S,(222041570U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

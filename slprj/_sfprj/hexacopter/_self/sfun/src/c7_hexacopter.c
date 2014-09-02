@@ -326,7 +326,7 @@ static void sf_gateway_c7_hexacopter(SFc7_hexacopterInstanceStruct
   c7_H_sample = (real_T (*)[3])ssGetInputPortSignal(chartInstance->S, 0);
   _SFD_SYMBOL_SCOPE_PUSH(0U, 0U);
   _sfTime_ = sf_get_time(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 4U, chartInstance->c7_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 5U, chartInstance->c7_sfEvent);
   for (c7_i10 = 0; c7_i10 < 3; c7_i10++) {
     _SFD_DATA_RANGE_CHECK((*c7_H_sample)[c7_i10], 0U);
   }
@@ -415,7 +415,7 @@ static void c7_chartstep_c7_hexacopter(SFc7_hexacopterInstanceStruct
   c7_c_i = (int32_T *)ssGetInputPortSignal(chartInstance->S, 1);
   c7_b_H = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
   c7_b_H_sample = (real_T (*)[3])ssGetInputPortSignal(chartInstance->S, 0);
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 4U, chartInstance->c7_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 5U, chartInstance->c7_sfEvent);
   c7_hoistedGlobal = *c7_c_i;
   for (c7_i13 = 0; c7_i13 < 3; c7_i13++) {
     c7_H_sample[c7_i13] = (*c7_b_H_sample)[c7_i13];
@@ -616,7 +616,7 @@ static void c7_chartstep_c7_hexacopter(SFc7_hexacopterInstanceStruct
     (*c7_b_Hcov)[c7_i34] = c7_Hcov[c7_i34];
   }
 
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 4U, chartInstance->c7_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 5U, chartInstance->c7_sfEvent);
 }
 
 static void initSimStructsc7_hexacopter(SFc7_hexacopterInstanceStruct

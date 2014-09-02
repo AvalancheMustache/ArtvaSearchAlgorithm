@@ -277,7 +277,7 @@ static void sf_gateway_c4_hexacopter(SFc4_hexacopterInstanceStruct
   c4_cos_theta = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
   _SFD_SYMBOL_SCOPE_PUSH(0U, 0U);
   _sfTime_ = sf_get_time(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 1U, chartInstance->c4_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 2U, chartInstance->c4_sfEvent);
   _SFD_DATA_RANGE_CHECK(*c4_cos_theta, 0U);
   _SFD_DATA_RANGE_CHECK(*c4_sin_theta, 1U);
   chartInstance->c4_sfEvent = CALL_EVENT;
@@ -355,7 +355,7 @@ static void c4_chartstep_c4_hexacopter(SFc4_hexacopterInstanceStruct
   c4_b_goto = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
   c4_b_sin_theta = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
   c4_b_cos_theta = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 1U, chartInstance->c4_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 2U, chartInstance->c4_sfEvent);
   c4_hoistedGlobal = *c4_b_cos_theta;
   c4_b_hoistedGlobal = *c4_b_sin_theta;
   c4_c_hoistedGlobal = *c4_b_Habs;
@@ -494,7 +494,7 @@ static void c4_chartstep_c4_hexacopter(SFc4_hexacopterInstanceStruct
   }
 
   *c4_b_omega = c4_omega;
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 1U, chartInstance->c4_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c4_sfEvent);
 }
 
 static void initSimStructsc4_hexacopter(SFc4_hexacopterInstanceStruct

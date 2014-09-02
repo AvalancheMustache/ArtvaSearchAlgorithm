@@ -225,7 +225,7 @@ static void sf_gateway_c2_hexacopter(SFc2_hexacopterInstanceStruct
   c2_H = (real_T (*)[3])ssGetInputPortSignal(chartInstance->S, 0);
   _SFD_SYMBOL_SCOPE_PUSH(0U, 0U);
   _sfTime_ = sf_get_time(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 0U, chartInstance->c2_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 1U, chartInstance->c2_sfEvent);
   for (c2_i0 = 0; c2_i0 < 3; c2_i0++) {
     _SFD_DATA_RANGE_CHECK((*c2_H)[c2_i0], 0U);
   }
@@ -277,7 +277,7 @@ static void c2_chartstep_c2_hexacopter(SFc2_hexacopterInstanceStruct
   c2_b_sin_theta = (real_T *)ssGetOutputPortSignal(chartInstance->S, 2);
   c2_b_cos_theta = (real_T *)ssGetOutputPortSignal(chartInstance->S, 1);
   c2_b_H = (real_T (*)[3])ssGetInputPortSignal(chartInstance->S, 0);
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 0U, chartInstance->c2_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 1U, chartInstance->c2_sfEvent);
   for (c2_i1 = 0; c2_i1 < 3; c2_i1++) {
     c2_H[c2_i1] = (*c2_b_H)[c2_i1];
   }
@@ -359,7 +359,7 @@ static void c2_chartstep_c2_hexacopter(SFc2_hexacopterInstanceStruct
   *c2_b_cos_theta = c2_cos_theta;
   *c2_b_sin_theta = c2_sin_theta;
   *c2_b_Habs = c2_Habs;
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c2_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 1U, chartInstance->c2_sfEvent);
 }
 
 static void initSimStructsc2_hexacopter(SFc2_hexacopterInstanceStruct

@@ -32,6 +32,7 @@ config.compile.ParzenWin = 'release';
 config.compile.rotmat = 'release';
 config.compile.Rot_G2B = 'release';
 config.compile.Rot_B2G = 'release';
+config.compile.RangeReceiver = 'release';
 
 % Simulink
 config.simulink.model = 'hexacopter';
@@ -41,7 +42,7 @@ config.simulink.run_model = 1;
 
 % Notification configurations
 config.notification.enable = 0;
-config.notification.mail_settings = '/home/nirvana1289/.config/email.mat';
+config.notification.mail_settings = 'D:\email_matlab.mat';
 config.notification.sendto = 'nirvana1289@gmail.com';
 if config.notification.enable == 1
    run('./script/notification_settings.m');
@@ -59,6 +60,7 @@ compiler_call('Rot_G2B_mex.c',config.compile.Rot_G2B);
 compiler_call('Rot_B2G_mex.c',config.compile.Rot_B2G);
 compiler_call('ParzenWindowEstimator.c',config.compile.ParzenWin);
 compiler_call('optimizer_residuals_c2.c',config.compile.optimizer);
+compiler_call('rangeReceiver_mex.c',config.compile.RangeReceiver);
 
 %% S-FUNCTION Compilation
 if config.simulink.SFuncComp == 1
@@ -95,7 +97,12 @@ end
 
 if config.obstacleAvoid == 1
     % Parametri ricevitore: ultrasonic range finder
-    RangeFinderParam = [ 6, 1 ];
+    RangeFinderParam = [ 6, 1, 0.1 ];
+    RangeFinderMeanError = 0;
+    RangeFinderVarianceError = 1;
+    RangeFinderErrorGain = 0.1;
+    RangeFinderFilterN = [ 1 ];
+    RangeFinderFilterD = [ 10, 1 ];
     % Definizione di un ostacolo
     obstacle = cube([5,5,5], [10,-20,0], [0,0,0], [0.5,0.5,0.5]);
 end 

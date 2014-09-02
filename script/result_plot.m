@@ -88,15 +88,14 @@ end
 
 figure('color','white')
     title('Learned Optimization Problem');
-    subplot(4,4,[2,3,4,6,7,8,10,11,12]);
-        plot(TP(1,1),TP(1,2),'ro'); hold on;
+    subplot(4,4,[2,3,4,6,7,8,10,11,12])
         plot(Posizione(:,1),Posizione(:,2),'k'); hold on;
-        plot(pos_opt(1,:),pos_opt(2,:),'x','Color',[.7 .7 .7]);
+        plot(pos_opt(1,:),pos_opt(2,:),'x','Color',[.7 .7 .7]); hold on;
+         plot(TP(1,1),TP(1,2),'ro');
         xlim([-50;50]);ylim([-50;50]);
         xlabel('x [m]'); ylabel('y [m]'); grid on;
     subplot(4,4,[14,15,16])
         hextX = plot(X,extX_data); hold on; grid on;
-        camroll(180);
         set(gca(),'xtick',[]);
     subplot(4,4,[1,5,9])
         plot(Y,extY_data,'r'); grid on;
@@ -104,40 +103,31 @@ figure('color','white')
         set(gca(),'xtick',[]);
 
 %% Range finder receiver
-
+RangeReadings = squeeze(RangeReadings);
 figure('color','white')
     subplot(4,4,[2,3]);
-        plot(time,RangeResults(:,1));
+        plot(time,RangeReadings(1,:)); hold on;
+        plot(time,RangeFiltered(:,1).^(-1),'r');
         title({'Range Finder Receiver'});
-        legend({'0'});
+        legend({'0'}); grid on;
     subplot(4,4,[5,6]);
-        plot(time,RangeResults(:,2));
-        legend({'\pi/3'});
+        plot(time,RangeReadings(2,:)); hold on;
+        plot(time,RangeFiltered(:,2).^(-1),'r');
+        legend({'\pi/3'}); grid on;
     subplot(4,4,[7,8]);
-        plot(time,RangeResults(:,3));
-        legend({'5 \pi/3'});
+        plot(time,RangeReadings(3,:)); hold on;
+        plot(time,RangeFiltered(:,3).^(-1),'r');
+        legend({'5 \pi/3'}); grid on;
     subplot(4,4,[9,10]);
-        plot(time,RangeResults(:,4));
-        legend({'2 \pi/3'});
+        plot(time,RangeReadings(4,:)); hold on;
+        plot(time,RangeFiltered(:,4).^(-1),'r');
+        legend({'2 \pi/3'}); grid on;
     subplot(4,4,[11,12]);
-        plot(time,RangeResults(:,5));
-        legend({'4 \pi/3'});
+        plot(time,RangeReadings(5,:)); hold on;
+        plot(time,RangeFiltered(:,5).^(-1),'r');
+        legend({'4 \pi/3'}); grid on;
     subplot(4,4,[14,15]);
-        plot(time,RangeResults(:,6));
-        legend({'3 \pi/3'});
+        plot(time,RangeReadings(6,:)); hold on;
+        plot(time,RangeFiltered(:,6).^(-1),'r');
+        legend({'3 \pi/3'}); grid on;
         
-%% Position ParzenWindow UNLEARNED
-% 
-% sigma = 1;
-% X = -100:0.1:100;
-% extX = @(x)(ParzenWindowEstimator(x,pos_opt_rt(1,:)',sigma));
-% for i = 1:size(X,2)
-%     extX_data(i) = extX(X(i));
-% end
-% 
-% sigma = 1;
-% Y = -100:0.1:100;
-% extY = @(y)(ParzenWindowEstimator(y,pos_opt_rt(2,:)',sigma));
-% for i = 1:size(Y,2)
-%     extY_data(i) = extY(Y(i));
-% end
